@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+
+import classes from "./Playlist.module.scss";
+
 import { ISpotifyPlaylistFull } from "interfaces/ISpotifyPlaylist.interface";
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";
 
@@ -27,20 +30,15 @@ const Playlist: React.FC<IProps> = ({ load }: IProps) => {
     };
   }, [load]);
 
-  return (
-    <div>
-      {data ? (
-        <div
-          style={{
-            backgroundImage: `url(${data.images[0].url})`,
-            height: `${data.images[0].height}px`,
-            width: `${data.images[0].width}px`
-          }}
-        />
-      ) : (
-        "Not found"
-      )}
-    </div>
+  return data ? (
+    <div
+      className={classes.cover}
+      style={{
+        backgroundImage: `url(${data.images[0].url})`
+      }}
+    />
+  ) : (
+    <div>Not found</div>
   );
 };
 
