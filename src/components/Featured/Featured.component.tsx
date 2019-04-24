@@ -2,12 +2,17 @@ import React, { useState, useEffect } from "react";
 
 import { ISpotifyFeatured } from "interfaces/ISpotifyFeatured.interface";
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";
+import { ISpotifyPlaylistFull } from "interfaces/ISpotifyPlaylist.interface";
+import Playlist from "components/Playlist/Playlist.component";
 
 interface IProps {
   getFeatured: () => Promise<ISpotifyFeatured | ISpotifyError | null>;
+  getPlaylist: (
+    url: string
+  ) => Promise<ISpotifyPlaylistFull | ISpotifyError | null>;
 }
 
-const Featured: React.FC<IProps> = ({ getFeatured }: IProps) => {
+const Featured: React.FC<IProps> = ({ getFeatured, getPlaylist }: IProps) => {
   const [featured, setFeatured] = useState<ISpotifyFeatured | null>(null);
 
   useEffect(() => {
@@ -30,7 +35,9 @@ const Featured: React.FC<IProps> = ({ getFeatured }: IProps) => {
   return (
     <div>
       {featured
-        ? featured.playlists.items.map(playlist => playlist.name)
+        ? featured.playlists.items.map(playlist => (
+            <Playlist load={() => getPlaylist(playlist.href)} />
+          ))
         : "Not found"}
     </div>
   );

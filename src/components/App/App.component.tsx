@@ -7,9 +7,10 @@ import Featured from "components/Featured/Featured.component";
 import { ISpotifyTokenRequest } from "interfaces/ISpotifyTokenRequest.interface";
 import { ISpotifyTokenResponse } from "interfaces/ISpotifyTokenResponse.interface";
 import { ISpotifyFeatured } from "interfaces/ISpotifyFeatured.interface";
-import { ISpotifyError } from "interfaces/ISpotifyError.interface";
+import { ISpotifyPlaylistFull } from "interfaces/ISpotifyPlaylist.interface";
 
 import { generateSpotifyAuthUrl } from "utils/generateSpotifyAuthUrl.util";
+import { getUrl } from "utils/getUrl.util";
 
 // import classes from "./App.module.scss";
 
@@ -60,32 +61,26 @@ const App: React.FC = () => {
     };
   }, [token]);
 
-  const getFeatured = useCallback(async (): Promise<
-    ISpotifyFeatured | ISpotifyError | null
-  > => {
+  const getFeatured = useCallback(async () => {
     if (token) {
-      try {
-        const response = await fetch(
-          "https://api.spotify.com/v1/browse/featured-playlists",
-          {
-            method: "GET",
-            headers: [["Authorization", `Bearer ${token}`]]
-          }
-        );
-        const json = await response.json();
-        return response.status === 200
-          ? (json as ISpotifyFeatured)
-          : (json as ISpotifyError);
-      } catch (error) {
-        console.log(error);
-      }
+      return await getUrl<ISpotifyFeatured>(
+        "https://api.spotify.com/v1/browse/featured-playlists",
+        token
+      );
+    }
+    return null;
+  }, [token]);
+
+  const getPlaylist = useCallback(async (url: string) => {
+    if (token) {
+      return await getUrl<ISpotifyPlaylistFull>(url, token);
     }
     return null;
   }, [token]);
 
   return (
     <div>
-      <Featured getFeatured={getFeatured} />
+      <Featured getFeatured={getFeatured} getPlaylist={getPlaylist} />
     </div>
   );
 };

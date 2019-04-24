@@ -35,7 +35,7 @@ export interface ISpotifyPlaylistFull {
   owner : ISpotifyUserPublic;
   public: boolean | null;
   snapshot_id: string,
-  tracks: ISpotifyPaging<ISpotifyPlaylistTrack>
+  tracks: ISpotifyPaging<ISpotifyPlaylistTrack[]>
   type: "playlist";
   uri: string;
 }
