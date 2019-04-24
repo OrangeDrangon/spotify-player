@@ -3,5 +3,5 @@ import { ISpotifyPlaylistSimple } from "./ISpotifyPlaylist.interface";
 
 export interface ISpotifyFeatured {
   message: string;
-  playlists: ISpotifyPaging<ISpotifyPlaylistSimple>;
+  playlists: ISpotifyPaging<ISpotifyPlaylistSimple[]>;
 }

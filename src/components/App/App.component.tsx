@@ -2,12 +2,14 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import qs from "query-string";
 
+import Featured from "components/Featured/Featured.component";
+
 import { ISpotifyTokenRequest } from "interfaces/ISpotifyTokenRequest.interface";
 import { ISpotifyTokenResponse } from "interfaces/ISpotifyTokenResponse.interface";
-
-import { generateSpotifyAuthUrl } from "utils/generateSpotifyAuthUrl.util";
 import { ISpotifyFeatured } from "interfaces/ISpotifyFeatured.interface";
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";
+
+import { generateSpotifyAuthUrl } from "utils/generateSpotifyAuthUrl.util";
 
 // import classes from "./App.module.scss";
 
@@ -59,7 +61,7 @@ const App: React.FC = () => {
   }, [token]);
 
   const getFeatured = useCallback(async (): Promise<
-    ISpotifyFeatured | ISpotifyError | undefined
+    ISpotifyFeatured | ISpotifyError | null
   > => {
     if (token) {
       try {
@@ -78,9 +80,14 @@ const App: React.FC = () => {
         console.log(error);
       }
     }
+    return null;
   }, [token]);
 
-  return <div>{token}</div>;
+  return (
+    <div>
+      <Featured getFeatured={getFeatured} />
+    </div>
+  );
 };
 
 export default App;
