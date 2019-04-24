@@ -14,14 +14,11 @@ const Featured: React.FC<IProps> = ({ getFeatured }: IProps) => {
     let cancelled = false;
     (async () => {
       const unfiltered = await getFeatured();
-      console.log(unfiltered, "unfiltered");
       if (unfiltered) {
         if (!(unfiltered as ISpotifyError).status) {
           const featuredNew = unfiltered as ISpotifyFeatured;
-          console.log(featuredNew, "featuredNew");
           if (!cancelled) {
             setFeatured(featuredNew);
-            console.log("set state");
           }
         }
       }
