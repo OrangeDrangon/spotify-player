@@ -2,15 +2,20 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import qs from "query-string";
 
-import Featured from "components/Featured/Featured.component";
+import Playlists from "components/Playlists/Playlists.component";
 
 import { ISpotifyTokenRequest } from "interfaces/ISpotifyTokenRequest.interface";
 import { ISpotifyTokenResponse } from "interfaces/ISpotifyTokenResponse.interface";
 import { ISpotifyFeatured } from "interfaces/ISpotifyFeatured.interface";
-import { ISpotifyPlaylistFull } from "interfaces/ISpotifyPlaylist.interface";
+import {
+  ISpotifyPlaylistFull,
+  ISpotifyPlaylistSimple
+} from "interfaces/ISpotifyPlaylist.interface";
 
 import { generateSpotifyAuthUrl } from "utils/generateSpotifyAuthUrl.util";
 import { getUrl } from "utils/getUrl.util";
+import { ISpotifyPaging } from "interfaces/ISpotifyPaging.interface";
+import { ISpotifyError } from "interfaces/ISpotifyError.interface";
 
 // import classes from "./App.module.scss";
 
@@ -33,7 +38,8 @@ const App: React.FC = () => {
             "streaming",
             "user-read-birthdate",
             "user-read-email",
-            "user-read-private"
+            "user-read-private",
+            "playlist-read-private"
           ]
         };
         window.location.assign(generateSpotifyAuthUrl(requestContents));
@@ -62,25 +68,35 @@ const App: React.FC = () => {
   }, [token]);
 
   const getFeatured = useCallback(async () => {
-    if (token) {
-      return await getUrl<ISpotifyFeatured>(
-        "https://api.spotify.com/v1/browse/featured-playlists",
-        token
-      );
-    }
-    return null;
+    const response = await getUrl<ISpotifyFeatured>(
+      "https://api.spotify.com/v1/browse/featured-playlists",
+      token
+    );
+    return response
+      ? !(response as ISpotifyError).status
+        ? (response as ISpotifyFeatured).playlists
+        : (response as ISpotifyError)
+      : null;
   }, [token]);
 
-  const getPlaylist = useCallback(async (url: string) => {
-    if (token) {
+  const getPlaylist = useCallback(
+    async (url: string) => {
       return await getUrl<ISpotifyPlaylistFull>(url, token);
-    }
-    return null;
+    },
+    [token]
+  );
+
+  const getMyPlaylists = useCallback(async () => {
+    return await getUrl<ISpotifyPaging<ISpotifyPlaylistSimple[]>>(
+      "https://api.spotify.com/v1/me/playlists",
+      token
+    );
   }, [token]);
 
   return (
     <div>
-      <Featured getFeatured={getFeatured} getPlaylist={getPlaylist} />
+      <Playlists key="a" getSimple={getFeatured} getFull={getPlaylist} />
+      <Playlists key="b" getSimple={getMyPlaylists} getFull={getPlaylist} />
     </div>
   );
 };

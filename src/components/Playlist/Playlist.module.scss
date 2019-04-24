@@ -4,6 +4,13 @@
   transition: transform .1s ease-in-out;
 
   background-size: contain;
+  background-repeat: no-repeat;
+  background-color: black;
+  background-position: center;
+
+  border-radius: 20px;
+
+  margin: 10px;
 }
 
 .cover:hover {

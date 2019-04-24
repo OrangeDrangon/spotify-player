@@ -38,7 +38,7 @@ const Playlist: React.FC<IProps> = ({ load }: IProps) => {
             ? {
                 backgroundImage: `url(${data.images[0].url})`
               }
-            : { backgroundColor: "#494949" }
+            : { }
         }
         onClick={() => console.log(data)}
       />
