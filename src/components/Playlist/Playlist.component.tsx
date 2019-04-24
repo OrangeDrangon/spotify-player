@@ -30,15 +30,18 @@ const Playlist: React.FC<IProps> = ({ load }: IProps) => {
     };
   }, [load]);
 
-  return data ? (
-    <div
-      className={classes.cover}
-      style={{
-        backgroundImage: `url(${data.images[0].url})`
-      }}
-    />
-  ) : (
-    <div>Not found</div>
+  return (
+      <div
+        className={classes.cover}
+        style={
+          data
+            ? {
+                backgroundImage: `url(${data.images[0].url})`
+              }
+            : { backgroundColor: "#494949" }
+        }
+        onClick={() => console.log(data)}
+      />
   );
 };
 

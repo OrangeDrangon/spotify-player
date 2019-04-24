@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 
+import classes from "./Featured.module.scss";
+import Playlist from "components/Playlist/Playlist.component";
+
 import { ISpotifyFeatured } from "interfaces/ISpotifyFeatured.interface";
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";
 import { ISpotifyPlaylistFull } from "interfaces/ISpotifyPlaylist.interface";
-import Playlist from "components/Playlist/Playlist.component";
 
 interface IProps {
   getFeatured: () => Promise<ISpotifyFeatured | ISpotifyError | null>;
@@ -33,12 +35,10 @@ const Featured: React.FC<IProps> = ({ getFeatured, getPlaylist }: IProps) => {
     };
   }, [getFeatured]);
   return (
-    <div>
-      {featured
-        ? featured.playlists.items.map(playlist => (
-            <Playlist load={() => getPlaylist(playlist.href)} />
-          ))
-        : "Not found"}
+    <div className={classes.container}>
+      {(featured ? featured.playlists.items : []).map(playlist => (
+        <Playlist key={playlist.id} load={() => getPlaylist(playlist.href)} />
+      ))}
     </div>
   );
 };
