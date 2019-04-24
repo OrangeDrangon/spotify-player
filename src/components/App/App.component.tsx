@@ -12,7 +12,7 @@ type Token = string | null;
 
 const App: React.FC = () => {
   const [token, setToken] = useState<Token>(null);
-
+    
   useEffect(() => {
     let cancelled = false;
     if (!token) {
@@ -20,8 +20,8 @@ const App: React.FC = () => {
         const params = qs.parse(window.location.hash);
         if (!params.access_token) {
           const requestContents: ISpotifyTokenRequest = {
-            client_id: "7ff4c2742b1d4e91b297c2ef6bf8d041",
-            redirect_uri: process.env.REDIRECT_URI || "",
+            client_id: process.env.CLIENT_ID || "",
+            redirect_uri: process.env.REACT_APP_REDIRECT_URI || "",
             response_type: "token",
             scopes: [
               "streaming",
@@ -30,7 +30,7 @@ const App: React.FC = () => {
               "user-read-private"
             ]
           };
-          window.location.href = generateSpotifyAuthUrl(requestContents);
+          window.location.assign(generateSpotifyAuthUrl(requestContents));
         } else {
           // We know it is this type at this point so we cast to it
           const spotifyResponse = (params as unknown) as ISpotifyTokenResponse;
