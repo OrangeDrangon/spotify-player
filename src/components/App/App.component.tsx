@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import qs from "query-string";
 
@@ -12,6 +12,7 @@ type Token = string | null;
 
 const App: React.FC = () => {
   const [token, setToken] = useState<Token>(null);
+
   useEffect(() => {
     let cancelled = false;
     if (!token) {
@@ -46,6 +47,22 @@ const App: React.FC = () => {
     return () => {
       cancelled = true;
     };
+  }, [token]);
+
+  const getFeatured = useCallback(async () => {
+    try {
+      const unparsed = await fetch(
+        "https://api.spotify.com/v1/browse/featured-playlists",
+        {
+          method: "GET",
+          headers: [["Authorization", `Bearer ${token}`]]
+        }
+      );
+      const json = await unparsed.json();
+      return json;
+    } catch (error) {
+      console.log(error);
+    }
   }, [token]);
 
   return <div>{token}</div>;
