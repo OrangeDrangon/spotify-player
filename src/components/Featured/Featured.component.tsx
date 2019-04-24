@@ -16,7 +16,7 @@ const Featured: React.FC<IProps> = ({ getFeatured }: IProps) => {
       const unfiltered = await getFeatured();
       console.log(unfiltered, "unfiltered");
       if (unfiltered) {
-        if (!unfiltered.message) {
+        if (!(unfiltered as ISpotifyError).status) {
           const featuredNew = unfiltered as ISpotifyFeatured;
           console.log(featuredNew, "featuredNew");
           if (!cancelled) {
