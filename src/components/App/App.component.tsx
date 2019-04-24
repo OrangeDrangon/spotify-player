@@ -21,7 +21,7 @@ const App: React.FC = () => {
         if (!params.access_token) {
           const requestContents: ISpotifyTokenRequest = {
             client_id: "7ff4c2742b1d4e91b297c2ef6bf8d041",
-            redirect_uri: "http://localhost:3000",
+            redirect_uri: process.env.REDIRECT_URI || "",
             response_type: "token",
             scopes: [
               "streaming",
