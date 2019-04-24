@@ -27,7 +27,21 @@ const Playlist: React.FC<IProps> = ({ load }: IProps) => {
     };
   }, [load]);
 
-  return <div>{data ? data.name : "Not found"}</div>;
+  return (
+    <div>
+      {data ? (
+        <div
+          style={{
+            backgroundImage: `url(${data.images[0].url})`,
+            height: `${data.images[0].height}px`,
+            width: `${data.images[0].width}px`
+          }}
+        />
+      ) : (
+        "Not found"
+      )}
+    </div>
+  );
 };
 
 export default Playlist;
