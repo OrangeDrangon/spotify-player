@@ -7,7 +7,7 @@ if (username) {
   if (token) {
     ghPages.publish("build", {
       message: "Deploying app...",
-      repo:  `https://${username}:${token}@github.com/OrangeDrangon/todo-react.git`,
+      repo:  `https://${username}:${token}@github.com/OrangeDrangon/spotify-player.git`,
       silent: true
     }, (err) => {
       if (err) {
