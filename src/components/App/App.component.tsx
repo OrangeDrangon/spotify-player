@@ -20,7 +20,7 @@ const App: React.FC = () => {
         const params = qs.parse(window.location.hash);
         if (!params.access_token) {
           const requestContents: ISpotifyTokenRequest = {
-            client_id: process.env.CLIENT_ID || "",
+            client_id: process.env.REACT_APP_CLIENT_ID || "",
             redirect_uri: process.env.REACT_APP_REDIRECT_URI || "",
             response_type: "token",
             scopes: [
