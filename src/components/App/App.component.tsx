@@ -1,27 +1,54 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 
-import classes from './App.module.scss';
-import logo from 'assets/logo.svg';
+import qs from "query-string";
+
+import { generateSpotifyAuthUrl } from "utils/generateSpotifyAuthUrl.util";
+import { ISpotifyTokenRequest } from "interfaces/ISpotifyTokenRequest.interface";
+import { ISpotifyTokenResponse } from "interfaces/ISpotifyTokenResponse.interface";
+
+// import classes from "./App.module.scss";
+
+type Token = string | null;
 
 const App: React.FC = () => {
-  return (
-    <div className={classes.App}>
-      <header className={classes.header}>
-        <img src={logo} className={classes.logo} alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className={classes.link}
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+  const [token, setToken] = useState<Token>(null);
+  useEffect(() => {
+    let cancelled = false;
+    if (!token) {
+      (async () => {
+        const params = qs.parse(window.location.hash);
+        if (!params.access_token) {
+          const requestContents: ISpotifyTokenRequest = {
+            client_id: "7ff4c2742b1d4e91b297c2ef6bf8d041",
+            redirect_uri: "http://localhost:3000",
+            response_type: "token",
+            scopes: [
+              "streaming",
+              "user-read-birthdate",
+              "user-read-email",
+              "user-read-private"
+            ]
+          };
+          window.location.href = generateSpotifyAuthUrl(requestContents);
+        } else {
+          // We know it is this type at this point so we cast to it
+          const spotifyResponse = (params as unknown) as ISpotifyTokenResponse;
+
+          // If the effect has not been cancelled we set the state
+          if (!cancelled) {
+            setToken(spotifyResponse.access_token);
+          }
+          // Removes tokens from the url
+          window.location.hash = "";
+        }
+      })();
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, [token]);
+
+  return <div>{token}</div>;
+};
 
 export default App;
