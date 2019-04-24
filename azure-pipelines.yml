@@ -38,4 +38,4 @@ steps:
 - script: |
     node deploy.js $(USERNAME) $(ACCESS_TOKEN)
   displayName: 'Deploy App to GitHub Pages'
-condition: "and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))"
+  condition: "and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))"
