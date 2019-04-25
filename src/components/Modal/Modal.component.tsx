@@ -19,7 +19,7 @@ const Modal: React.FC<IProps> = ({
       onClick={onBackdropClick}
       style={open ? {} : { display: "none" }}
     >
-      {children}
+      <div onClick={() => {}}>{children}</div>
     </div>
   );
 };
