@@ -2,6 +2,9 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import qs from "query-string";
 
+// import classes from "./App.module.scss";
+
+import Header from "components/Header/Header.component";
 import Playlists from "components/Playlists/Playlists.component";
 
 import { ISpotifyTokenRequest } from "interfaces/ISpotifyTokenRequest.interface";
@@ -17,12 +20,16 @@ import { getUrl } from "utils/getUrl.util";
 import { ISpotifyPaging } from "interfaces/ISpotifyPaging.interface";
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";
 
-// import classes from "./App.module.scss";
-
 type Token = string | null;
+
+export const headerCatagories: { [key: string]: number } = {
+  featured: 0,
+  personal: 1
+};
 
 const App: React.FC = () => {
   const [token, setToken] = useState<Token>(null);
+  const [selected, setSelected] = useState(headerCatagories.featured);
 
   useEffect(() => {
     let cancelled = false;
@@ -94,10 +101,23 @@ const App: React.FC = () => {
   }, [token]);
 
   return (
-    <div>
-      <Playlists key="a" getSimple={getFeatured} getFull={getPlaylist} />
-      <Playlists key="b" getSimple={getMyPlaylists} getFull={getPlaylist} />
-    </div>
+    <React.Fragment>
+      <Header setSelected={setSelected} />
+      <div
+        style={
+          selected === headerCatagories.featured ? {} : { display: "none" }
+        }
+      >
+        <Playlists getSimple={getFeatured} getFull={getPlaylist} />
+      </div>
+      <div
+        style={
+          selected === headerCatagories.personal ? {} : { display: "none" }
+        }
+      >
+        <Playlists getSimple={getMyPlaylists} getFull={getPlaylist} />
+      </div>
+    </React.Fragment>
   );
 };
 

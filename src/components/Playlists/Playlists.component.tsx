@@ -28,7 +28,6 @@ const Featured: React.FC<IProps> = ({ getSimple, getFull }: IProps) => {
     let cancelled = false;
     (async () => {
       const unfiltered = await getSimple();
-      console.log(unfiltered);
       if (unfiltered) {
         if (!(unfiltered as ISpotifyError).status) {
           const featuredNew = unfiltered as ISpotifyPaging<
