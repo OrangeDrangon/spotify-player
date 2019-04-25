@@ -46,7 +46,7 @@ const Featured: React.FC<IProps> = ({ getSimple, getFull }: IProps) => {
   return (
     <div className={classes.container}>
       {(playlists ? playlists.items : []).map(playlist => (
-        <Playlist key={playlist.id} load={() => getFull(playlist.href)} />
+        <Playlist key={playlist.id} href={playlist.href} load={getFull} />
       ))}
     </div>
   );
