@@ -15,9 +15,7 @@ const Playlist: React.FC<IProps> = ({ href, load }: IProps) => {
 
   const getData = useCallback(async () => {
     return await load(href);
-    },
-    [href, load],
-  )
+  }, [href, load]);
 
   useEffect(() => {
     let cancelled = false;
@@ -38,17 +36,17 @@ const Playlist: React.FC<IProps> = ({ href, load }: IProps) => {
   }, [getData]);
 
   return (
-      <div
-        className={classes.cover}
-        style={
-          data
-            ? {
-                backgroundImage: `url(${data.images[0].url})`
-              }
-            : { }
-        }
-        onClick={() => console.log(data)}
-      />
+    <div
+      className={classes.cover}
+      style={
+        data
+          ? {
+              backgroundImage: `url(${data.images[0].url})`
+            }
+          : {}
+      }
+      onClick={() => console.log(data)}
+    />
   );
 };
 
