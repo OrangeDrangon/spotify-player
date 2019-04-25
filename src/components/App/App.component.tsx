@@ -20,12 +20,9 @@ import { getUrl } from "utils/getUrl.util";
 import { ISpotifyPaging } from "interfaces/ISpotifyPaging.interface";
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";
 
-type Token = string | null;
+import { headerCatagories } from "constnants/headerCatagories.constant";
 
-export const headerCatagories: { [key: string]: number } = {
-  featured: 0,
-  personal: 1
-};
+type Token = string | null;
 
 const App: React.FC = () => {
   const [token, setToken] = useState<Token>(null);
