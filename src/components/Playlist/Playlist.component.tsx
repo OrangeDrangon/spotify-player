@@ -2,6 +2,9 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import classes from "./Playlist.module.scss";
 
+import Card from "components/Card/Card.component";
+import Modal from "components/Modal/Modal.component";
+
 import { ISpotifyPlaylistFull } from "interfaces/ISpotifyPlaylist.interface";
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";
 
@@ -12,6 +15,7 @@ interface IProps {
 
 const Playlist: React.FC<IProps> = ({ href, load }: IProps) => {
   const [data, setData] = useState<ISpotifyPlaylistFull | null>(null);
+  const [open, setOpen] = useState(false);
 
   const getData = useCallback(async () => {
     return await load(href);
@@ -36,17 +40,24 @@ const Playlist: React.FC<IProps> = ({ href, load }: IProps) => {
   }, [getData]);
 
   return (
-    <div
-      className={classes.cover}
-      style={
-        data
-          ? {
-              backgroundImage: `url(${data.images[0].url})`
-            }
-          : {}
-      }
-      onClick={() => console.log(data)}
-    />
+    <React.Fragment>
+      <div
+        className={classes.cover}
+        onClick={() => setOpen(true)}
+        style={
+          data
+            ? {
+                backgroundImage: `url(${data.images[0].url})`
+              }
+            : {}
+        }
+      />
+      <Modal open={open} onBackdropClick={() => setOpen(false)}>
+        <Card>
+          {data ? data.name : "Loading!"}
+        </Card>
+      </Modal>
+    </React.Fragment>
   );
 };
 

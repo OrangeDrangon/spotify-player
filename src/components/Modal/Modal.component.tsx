@@ -16,10 +16,14 @@ const Modal: React.FC<IProps> = ({
   return (
     <div
       className={classes.backdrop}
-      onClick={onBackdropClick}
+      onClick={({ target, currentTarget }) => {
+        if (target === currentTarget) {
+          onBackdropClick();
+        }
+      }}
       style={open ? {} : { display: "none" }}
     >
-      <div onClick={() => {}}>{children}</div>
+      {children}
     </div>
   );
 };
