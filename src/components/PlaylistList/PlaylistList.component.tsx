@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import classes from "./Playlists.module.scss";
+import classes from "./PlaylistList.module.scss";
 import Playlist from "components/Playlist/Playlist.component";
 
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";

@@ -5,7 +5,7 @@ import qs from "query-string";
 // import classes from "./App.module.scss";
 
 import Header from "components/Header/Header.component";
-import Playlists from "components/Playlists/Playlists.component";
+import PlaylistList from "components/PlaylistList/PlaylistList.component";
 
 import { ISpotifyTokenRequest } from "interfaces/ISpotifyTokenRequest.interface";
 import { ISpotifyTokenResponse } from "interfaces/ISpotifyTokenResponse.interface";
@@ -108,14 +108,14 @@ const App: React.FC = () => {
           selected === headerCatagories.featured ? {} : { display: "none" }
         }
       >
-        <Playlists getSimple={getFeatured} getFull={getPlaylist} />
+        <PlaylistList getSimple={getFeatured} getFull={getPlaylist} />
       </div>
       <div
         style={
           selected === headerCatagories.personal ? {} : { display: "none" }
         }
       >
-        <Playlists getSimple={getMyPlaylists} getFull={getPlaylist} />
+        <PlaylistList getSimple={getMyPlaylists} getFull={getPlaylist} />
       </div>
     </React.Fragment>
   );
