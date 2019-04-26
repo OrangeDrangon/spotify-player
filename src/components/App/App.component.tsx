@@ -1,36 +1,27 @@
-import React, { useState, useEffect, useCallback } from "react";
-
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import qs from "query-string";
+import { connect } from "react-redux";
 
 import classes from "./App.module.scss";
 
 import Header from "components/Header/Header.component";
-import PlaylistList from "components/PlaylistList/PlaylistList.component";
+import Personal from "components/Personal/Personal.component";
+import Featured from "components/Featured/Featured.component";
+import Callback from "components/Callback/Callback.component";
 
 import { ISpotifyTokenRequest } from "interfaces/ISpotifyTokenRequest.interface";
-import { ISpotifyTokenResponse } from "interfaces/ISpotifyTokenResponse.interface";
-import { ISpotifyFeatured } from "interfaces/ISpotifyFeatured.interface";
-import {
-  ISpotifyPlaylistFull,
-  ISpotifyPlaylistSimple
-} from "interfaces/ISpotifyPlaylist.interface";
 
 import { generateSpotifyAuthUrl } from "utils/generateSpotifyAuthUrl.util";
-import { getUrl } from "utils/getUrl.util";
-import { ISpotifyPaging } from "interfaces/ISpotifyPaging.interface";
-import { ISpotifyError } from "interfaces/ISpotifyError.interface";
 
-import { headerCatagories } from "constnants/headerCatagories.constant";
+import { IState } from "redux/reducers/root.reducer";
 
-type Token = string | null;
+interface IProps {
+  token: string | null;
+}
 
-const App: React.FC = () => {
-  const [token, setToken] = useState<Token>(null);
-  const [selected, setSelected] = useState(headerCatagories.featured);
-
+const ConnectedApp: React.FC<IProps> = ({ token }: IProps) => {
   useEffect(() => {
-    let cancelled = false;
-    let timeoutId: NodeJS.Timeout | null = null;
     if (!token) {
       const params = qs.parse(window.location.hash);
       if (!params.access_token) {
@@ -44,82 +35,31 @@ const App: React.FC = () => {
             "user-read-email",
             "user-read-private",
             "playlist-read-private"
-          ]
+          ],
+          state: window.location.pathname
         };
         window.location.assign(generateSpotifyAuthUrl(requestContents));
-      } else {
-        // We know it is this type at this point so we cast to it
-        const spotifyResponse = (params as unknown) as ISpotifyTokenResponse;
-
-        // If the effect has not been cancelled we set the state
-        if (!cancelled) {
-          setToken(spotifyResponse.access_token);
-          timeoutId = setTimeout(
-            () => setToken(null),
-            Number(spotifyResponse.expires_in) * 1000
-          );
-        }
-        // Removes tokens from the url
-        window.location.hash = "";
       }
     }
-    return () => {
-      cancelled = true;
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-    };
-  }, [token]);
-
-  const getFeatured = useCallback(async () => {
-    const response = await getUrl<ISpotifyFeatured>(
-      "https://api.spotify.com/v1/browse/featured-playlists",
-      token
-    );
-    return response
-      ? !(response as ISpotifyError).status
-        ? (response as ISpotifyFeatured).playlists
-        : (response as ISpotifyError)
-      : null;
-  }, [token]);
-
-  const getPlaylist = useCallback(
-    async (url: string) => {
-      return await getUrl<ISpotifyPlaylistFull>(url, token);
-    },
-    [token]
-  );
-
-  const getMyPlaylists = useCallback(async () => {
-    return await getUrl<ISpotifyPaging<ISpotifyPlaylistSimple[]>>(
-      "https://api.spotify.com/v1/me/playlists",
-      token
-    );
   }, [token]);
 
   return (
-    <React.Fragment>
-      <Header setSelected={setSelected} />
+    <Router>
+      <Header />
       <div className={classes.page}>
-        <section
-          className={classes.section}
-          style={
-            selected === headerCatagories.featured ? {} : { display: "none" }
-          }
-        >
-          <PlaylistList getSimple={getFeatured} getFull={getPlaylist} />
-        </section>
-        <section
-          className={classes.section}
-          style={
-            selected === headerCatagories.personal ? {} : { display: "none" }
-          }
-        >
-          <PlaylistList getSimple={getMyPlaylists} getFull={getPlaylist} />
-        </section>
+        <Route exact path="/" render={() => <Redirect to="/featured" />} />
+        <Route path="/featured" component={Featured} />
+        <Route path="/personal" component={Personal} />
+        <Route path="/callback" component={Callback} />
       </div>
-    </React.Fragment>
+    </Router>
   );
 };
+
+const mapStateToProps = ({ token }: IState) => {
+  return { token };
+};
+
+const App = connect(mapStateToProps)(ConnectedApp);
 
 export default App;

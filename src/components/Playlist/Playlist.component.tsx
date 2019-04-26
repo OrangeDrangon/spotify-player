@@ -1,7 +1,10 @@
 /* eslint-disable jsx-a11y/heading-has-content */
 import React, { useState, useEffect, useCallback } from "react";
+import { connect } from "react-redux";
 
 import classes from "./Playlist.module.scss";
+
+import close from "assets/icons/close.svg";
 
 import Card from "components/Card/Card.component";
 import Modal from "components/Modal/Modal.component";
@@ -9,20 +12,24 @@ import Tracks from "components/Tracks/Tracks.component";
 
 import { ISpotifyPlaylistFull } from "interfaces/ISpotifyPlaylist.interface";
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";
+
 import { htmlDecode } from "utils/htmlDecode.util";
+import { getUrl } from "utils/getUrl.util";
+
+import { IState } from "redux/reducers/root.reducer";
 
 interface IProps {
   href: string;
-  load: (url: string) => Promise<ISpotifyPlaylistFull | ISpotifyError | null>;
+  token: string | null;
 }
 
-const Playlist: React.FC<IProps> = ({ href, load }: IProps) => {
+const ConnectedPlaylist: React.FC<IProps> = ({ href, token }: IProps) => {
   const [data, setData] = useState<ISpotifyPlaylistFull | null>(null);
   const [open, setOpen] = useState(false);
 
   const getData = useCallback(async () => {
-    return await load(href);
-  }, [href, load]);
+    return await getUrl<ISpotifyPlaylistFull>(href, token);
+  }, [href, token]);
 
   useEffect(() => {
     let cancelled = false;
@@ -57,6 +64,12 @@ const Playlist: React.FC<IProps> = ({ href, load }: IProps) => {
       />
       <Modal open={open} onBackdropClick={() => setOpen(false)}>
         <Card containerClass={classes.card}>
+          <img
+            src={close}
+            alt=""
+            className={classes.close}
+            onClick={() => setOpen(false)}
+          />
           {data ? (
             <div className={classes.wrapper}>
               <header className={classes.header}>
@@ -87,5 +100,11 @@ const Playlist: React.FC<IProps> = ({ href, load }: IProps) => {
     </React.Fragment>
   );
 };
+
+const mapStateToProps = ({ token }: IState) => {
+  return { token };
+};
+
+const Playlist = connect(mapStateToProps)(ConnectedPlaylist);
 
 export default Playlist;

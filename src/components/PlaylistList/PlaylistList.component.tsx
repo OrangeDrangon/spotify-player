@@ -4,22 +4,16 @@ import classes from "./PlaylistList.module.scss";
 import Playlist from "components/Playlist/Playlist.component";
 
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";
-import {
-  ISpotifyPlaylistFull,
-  ISpotifyPlaylistSimple
-} from "interfaces/ISpotifyPlaylist.interface";
+import { ISpotifyPlaylistSimple } from "interfaces/ISpotifyPlaylist.interface";
 import { ISpotifyPaging } from "interfaces/ISpotifyPaging.interface";
 
 interface IProps {
   getSimple: () => Promise<
     ISpotifyPaging<ISpotifyPlaylistSimple[]> | ISpotifyError | null
   >;
-  getFull: (
-    url: string
-  ) => Promise<ISpotifyPlaylistFull | ISpotifyError | null>;
 }
 
-const Featured: React.FC<IProps> = ({ getSimple, getFull }: IProps) => {
+const PlaylistList: React.FC<IProps> = ({ getSimple }: IProps) => {
   const [playlists, setPlaylists] = useState<ISpotifyPaging<
     ISpotifyPlaylistSimple[]
   > | null>(null);
@@ -46,10 +40,10 @@ const Featured: React.FC<IProps> = ({ getSimple, getFull }: IProps) => {
   return (
     <div className={classes.container}>
       {(playlists ? playlists.items : []).map(playlist => (
-        <Playlist key={playlist.id} href={playlist.href} load={getFull} />
+        <Playlist key={playlist.id} href={playlist.href} />
       ))}
     </div>
   );
 };
 
-export default Featured;
+export default PlaylistList;
