@@ -6,14 +6,14 @@
   justify-content: flex-start;
   align-items: center;
 
-  background-color: black;
+  background-color: rgba($color: #494949, $alpha: 1.0);
 
   z-index: 1;
 
   width: 100%;
 
   .button {
-    margin: 10px 0px 10px 10px;
+    margin: 15px 0px 15px 25px;
 
     padding: 6px 16px;
 
