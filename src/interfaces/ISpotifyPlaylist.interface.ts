@@ -25,7 +25,8 @@ export interface ISpotifyPlaylistSimple {
 
 
 export interface ISpotifyPlaylistFull {
-  collaborative: boolean,
+  collaborative: boolean;
+  description: string | null;
   external_urls: ISpotifyExternalUrls;
   followers: ISpotifyFollowers;
   href: string;

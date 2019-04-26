@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/heading-has-content */
 import React, { useState, useEffect, useCallback } from "react";
 
 import classes from "./Playlist.module.scss";
@@ -7,6 +8,7 @@ import Modal from "components/Modal/Modal.component";
 
 import { ISpotifyPlaylistFull } from "interfaces/ISpotifyPlaylist.interface";
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";
+import { htmlDecode } from "utils/htmlDecode.util";
 
 interface IProps {
   href: string;
@@ -53,8 +55,25 @@ const Playlist: React.FC<IProps> = ({ href, load }: IProps) => {
         }
       />
       <Modal open={open} onBackdropClick={() => setOpen(false)}>
-        <Card>
-          {data ? data.name : "Loading!"}
+        <Card containerClass={classes.card}>
+          {data ? (
+            <React.Fragment>
+              <header className={classes.header}>
+                <h1 className={classes.title}>{data.name}</h1>
+                <div className={classes.createdBy}>
+                  Created by{" "}
+                  <span className={classes.author}>
+                    {data.owner.display_name}
+                  </span>
+                </div>
+                <div className={classes.description}>
+                  {htmlDecode(data.description ? data.description : "")}
+                </div>
+              </header>
+            </React.Fragment>
+          ) : (
+            "Loading..."
+          )}
         </Card>
       </Modal>
     </React.Fragment>

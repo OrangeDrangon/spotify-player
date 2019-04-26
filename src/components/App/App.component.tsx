@@ -100,22 +100,24 @@ const App: React.FC = () => {
   return (
     <React.Fragment>
       <Header setSelected={setSelected} />
-      <section
-        className={classes.section}
-        style={
-          selected === headerCatagories.featured ? {} : { display: "none" }
-        }
-      >
-        <PlaylistList getSimple={getFeatured} getFull={getPlaylist} />
-      </section>
-      <section
-        className={classes.section}
-        style={
-          selected === headerCatagories.personal ? {} : { display: "none" }
-        }
-      >
-        <PlaylistList getSimple={getMyPlaylists} getFull={getPlaylist} />
-      </section>
+      <div className={classes.page}>
+        <section
+          className={classes.section}
+          style={
+            selected === headerCatagories.featured ? {} : { display: "none" }
+          }
+        >
+          <PlaylistList getSimple={getFeatured} getFull={getPlaylist} />
+        </section>
+        <section
+          className={classes.section}
+          style={
+            selected === headerCatagories.personal ? {} : { display: "none" }
+          }
+        >
+          <PlaylistList getSimple={getMyPlaylists} getFull={getPlaylist} />
+        </section>
+      </div>
     </React.Fragment>
   );
 };

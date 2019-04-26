@@ -10,7 +10,7 @@ interface IProps {
 const Card: React.FC<IProps> = ({ children, containerClass }: IProps) => {
   return (
     <div
-      className={`${containerClass ? containerClass : ""} ${classes.container}`}
+      className={`${classes.container} ${containerClass ? containerClass : ""}`}
     >
       {children}
     </div>
