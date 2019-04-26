@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import qs from "query-string";
 
-// import classes from "./App.module.scss";
+import classes from "./App.module.scss";
 
 import Header from "components/Header/Header.component";
 import PlaylistList from "components/PlaylistList/PlaylistList.component";
@@ -101,6 +101,7 @@ const App: React.FC = () => {
     <React.Fragment>
       <Header setSelected={setSelected} />
       <section
+        className={classes.section}
         style={
           selected === headerCatagories.featured ? {} : { display: "none" }
         }
@@ -108,6 +109,7 @@ const App: React.FC = () => {
         <PlaylistList getSimple={getFeatured} getFull={getPlaylist} />
       </section>
       <section
+        className={classes.section}
         style={
           selected === headerCatagories.personal ? {} : { display: "none" }
         }

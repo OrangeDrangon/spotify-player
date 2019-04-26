@@ -11,10 +11,16 @@ interface IProps {
 const Header: React.FC<IProps> = ({ setSelected }: IProps) => {
   return (
     <header className={classes.header}>
-      <button onClick={() => setSelected(headerCatagories.featured)}>
+      <button
+        className={classes.button}
+        onClick={() => setSelected(headerCatagories.featured)}
+      >
         Featured
       </button>
-      <button onClick={() => setSelected(headerCatagories.personal)}>
+      <button
+        className={classes.button}
+        onClick={() => setSelected(headerCatagories.personal)}
+      >
         Personal
       </button>
     </header>
