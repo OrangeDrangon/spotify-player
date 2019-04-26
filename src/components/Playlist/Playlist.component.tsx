@@ -5,6 +5,7 @@ import classes from "./Playlist.module.scss";
 
 import Card from "components/Card/Card.component";
 import Modal from "components/Modal/Modal.component";
+import Tracks from "components/Tracks/Tracks.component";
 
 import { ISpotifyPlaylistFull } from "interfaces/ISpotifyPlaylist.interface";
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";
@@ -57,7 +58,7 @@ const Playlist: React.FC<IProps> = ({ href, load }: IProps) => {
       <Modal open={open} onBackdropClick={() => setOpen(false)}>
         <Card containerClass={classes.card}>
           {data ? (
-            <React.Fragment>
+            <div className={classes.wrapper}>
               <header className={classes.header}>
                 <h1 className={classes.title}>{data.name}</h1>
                 <div className={classes.createdBy}>
@@ -70,7 +71,14 @@ const Playlist: React.FC<IProps> = ({ href, load }: IProps) => {
                   {htmlDecode(data.description ? data.description : "")}
                 </div>
               </header>
-            </React.Fragment>
+              <div className={classes.lineBreak} />
+              <section className={classes.section}>
+                <Tracks tracks={data.tracks} />
+              </section>
+              <section className={classes.buttons}>
+                <button className={classes.button}>Abc</button>
+              </section>
+            </div>
           ) : (
             "Loading..."
           )}

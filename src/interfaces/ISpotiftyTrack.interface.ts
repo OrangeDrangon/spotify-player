@@ -6,7 +6,7 @@ import { ISpotifyArtistSimple } from "./ISpotifyArtist.interface";
 
 export interface ISpotifyTrack {
   album: ISpotifyAlbumSimple;
-  artists: ISpotifyArtistSimple;
+  artists: ISpotifyArtistSimple[];
   available_markets: string[];
   disc_number: number;
   duration_ms: number;
