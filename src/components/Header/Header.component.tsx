@@ -1,28 +1,23 @@
 import React from "react";
-
-import { headerCatagories } from "constants/headerCatagories.constant";
+import { Link } from "react-router-dom";
 
 import classes from "./Header.module.scss";
 
-interface IProps {
-  setSelected: React.Dispatch<React.SetStateAction<number>>;
-}
-
-const Header: React.FC<IProps> = ({ setSelected }: IProps) => {
+const Header: React.FC = () => {
   return (
     <header className={classes.header}>
-      <button
+      <Link
+        to="/featured"
         className={classes.button}
-        onClick={() => setSelected(headerCatagories.featured)}
       >
         Featured
-      </button>
-      <button
+      </Link>
+      <Link
+        to="/personal"
         className={classes.button}
-        onClick={() => setSelected(headerCatagories.personal)}
       >
         Personal
-      </button>
+      </Link>
     </header>
   );
 };
