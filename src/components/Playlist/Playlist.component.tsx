@@ -3,6 +3,8 @@ import React, { useState, useEffect, useCallback } from "react";
 
 import classes from "./Playlist.module.scss";
 
+import close from "assets/icons/close.svg";
+
 import Card from "components/Card/Card.component";
 import Modal from "components/Modal/Modal.component";
 
@@ -56,6 +58,12 @@ const Playlist: React.FC<IProps> = ({ href, load }: IProps) => {
       />
       <Modal open={open} onBackdropClick={() => setOpen(false)}>
         <Card containerClass={classes.card}>
+          <img
+            src={close}
+            alt=""
+            className={classes.close}
+            onClick={() => setOpen(false)}
+          />
           {data ? (
             <React.Fragment>
               <header className={classes.header}>
