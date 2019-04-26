@@ -6,7 +6,7 @@
       "utils/*": ["utils/*"],
       "assets/*": ["assets/*"],
       "interfaces/*": ["interfaces/*"],
-      "cosntants/*": ["constants/*"],
+      "constants/*": ["constants/*"],
       "redux/*": ["redux/*"]
     }
   }

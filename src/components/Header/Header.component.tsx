@@ -1,6 +1,6 @@
 import React from "react";
 
-import { headerCatagories } from "constnants/headerCatagories.constant";
+import { headerCatagories } from "constants/headerCatagories.constant";
 
 import classes from "./Header.module.scss";
 

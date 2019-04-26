@@ -14,7 +14,7 @@ import { ISpotifyTokenResponse } from "interfaces/ISpotifyTokenResponse.interfac
 
 import { generateSpotifyAuthUrl } from "utils/generateSpotifyAuthUrl.util";
 
-import { headerCatagories } from "constnants/headerCatagories.constant";
+import { headerCatagories } from "constants/headerCatagories.constant";
 
 import { IState } from "redux/reducers/root.reducer";
 import { setToken } from "redux/actions/setToken.action";
