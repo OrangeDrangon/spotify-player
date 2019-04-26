@@ -100,20 +100,20 @@ const App: React.FC = () => {
   return (
     <React.Fragment>
       <Header setSelected={setSelected} />
-      <div
+      <section
         style={
           selected === headerCatagories.featured ? {} : { display: "none" }
         }
       >
         <PlaylistList getSimple={getFeatured} getFull={getPlaylist} />
-      </div>
-      <div
+      </section>
+      <section
         style={
           selected === headerCatagories.personal ? {} : { display: "none" }
         }
       >
         <PlaylistList getSimple={getMyPlaylists} getFull={getPlaylist} />
-      </div>
+      </section>
     </React.Fragment>
   );
 };
