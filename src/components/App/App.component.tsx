@@ -1,31 +1,35 @@
-import React, { useState, useEffect, useCallback } from "react";
-
+import React, { useState, useEffect } from "react";
 import qs from "query-string";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 
 import classes from "./App.module.scss";
 
 import Header from "components/Header/Header.component";
-import PlaylistList from "components/PlaylistList/PlaylistList.component";
+import Personal from "components/Personal/Personal.component";
+import Featured from "components/Featured/Featured.component";
 
 import { ISpotifyTokenRequest } from "interfaces/ISpotifyTokenRequest.interface";
 import { ISpotifyTokenResponse } from "interfaces/ISpotifyTokenResponse.interface";
-import { ISpotifyFeatured } from "interfaces/ISpotifyFeatured.interface";
-import {
-  ISpotifyPlaylistFull,
-  ISpotifyPlaylistSimple
-} from "interfaces/ISpotifyPlaylist.interface";
 
 import { generateSpotifyAuthUrl } from "utils/generateSpotifyAuthUrl.util";
-import { getUrl } from "utils/getUrl.util";
-import { ISpotifyPaging } from "interfaces/ISpotifyPaging.interface";
-import { ISpotifyError } from "interfaces/ISpotifyError.interface";
 
 import { headerCatagories } from "constnants/headerCatagories.constant";
 
-type Token = string | null;
+import { IState } from "redux/reducers/root.reducer";
+import { setToken } from "redux/actions/setToken.action";
 
-const App: React.FC = () => {
-  const [token, setToken] = useState<Token>(null);
+interface IProps {
+  token: string | null;
+  setToken: (
+    token: string | null
+  ) => {
+    type: string;
+    payload: string | null;
+  };
+}
+
+const ConnectedApp: React.FC<IProps> = ({ token, setToken }: IProps) => {
   const [selected, setSelected] = useState(headerCatagories.featured);
 
   useEffect(() => {
@@ -69,33 +73,7 @@ const App: React.FC = () => {
         clearTimeout(timeoutId);
       }
     };
-  }, [token]);
-
-  const getFeatured = useCallback(async () => {
-    const response = await getUrl<ISpotifyFeatured>(
-      "https://api.spotify.com/v1/browse/featured-playlists",
-      token
-    );
-    return response
-      ? !(response as ISpotifyError).status
-        ? (response as ISpotifyFeatured).playlists
-        : (response as ISpotifyError)
-      : null;
-  }, [token]);
-
-  const getPlaylist = useCallback(
-    async (url: string) => {
-      return await getUrl<ISpotifyPlaylistFull>(url, token);
-    },
-    [token]
-  );
-
-  const getMyPlaylists = useCallback(async () => {
-    return await getUrl<ISpotifyPaging<ISpotifyPlaylistSimple[]>>(
-      "https://api.spotify.com/v1/me/playlists",
-      token
-    );
-  }, [token]);
+  }, [token, setToken]);
 
   return (
     <React.Fragment>
@@ -107,7 +85,7 @@ const App: React.FC = () => {
             selected === headerCatagories.featured ? {} : { display: "none" }
           }
         >
-          <PlaylistList getSimple={getFeatured} getFull={getPlaylist} />
+          <Featured />
         </section>
         <section
           className={classes.section}
@@ -115,11 +93,24 @@ const App: React.FC = () => {
             selected === headerCatagories.personal ? {} : { display: "none" }
           }
         >
-          <PlaylistList getSimple={getMyPlaylists} getFull={getPlaylist} />
+          <Personal />
         </section>
       </div>
     </React.Fragment>
   );
 };
+
+const mapStateToProps = ({ token }: IState) => {
+  return { token };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return { setToken: (token: string | null) => dispatch(setToken(token)) };
+};
+
+const App = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ConnectedApp);
 
 export default App;
