@@ -44,7 +44,7 @@ const ConnectedApp: React.FC<IProps> = ({ token }: IProps) => {
   }, [token]);
 
   return (
-    <Router>
+    <Router basename="/">
       <Header />
       <div className={classes.page}>
         <Route exact path="/" render={() => <Redirect to="/featured" />} />

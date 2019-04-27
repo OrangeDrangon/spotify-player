@@ -12,20 +12,20 @@ interface IProps {
 }
 
 const Tracks: React.FC<IProps> = ({ tracks }: IProps) => {
+  console.log(tracks);
+
   return (
-    <table className={classes.table}>
-      <thead className={classes.thead}>
-        <tr className={classes.tr}>
-          <th>Song</th>
-          <th>Artist</th>
-        </tr>
-      </thead>
-      <tbody className={classes.tbody}>
+    <div className={classes.table}>
+      <div className={classes.header}>
+        <div className={classes.title}>Song</div>
+        <div className={classes.title}>Artist</div>
+      </div>
+      <div className={classes.content}>
         {tracks.items.map(track => (
           <Track key={track.track.id + Math.random()} track={track.track} />
         ))}
-      </tbody>
-    </table>
+      </div>
+    </div>
   );
 };
 

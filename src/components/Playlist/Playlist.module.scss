@@ -11,6 +11,8 @@
   border-radius: 20px;
 
   margin: 10px;
+
+  cursor: pointer;
 }
 
 .cover:hover {
@@ -18,9 +20,10 @@
 }
 
 .card {
-  height: 85%;
-  width: 85%;
+  height: 85vh;
+  width: 85vw;
 
+  min-width: 300px;
   max-width: 800px;
 
   position: relative;
@@ -34,6 +37,8 @@
     height: 25px;
 
     transition: transform 0.1s ease-in-out;
+
+    cursor: pointer;
   }
 
   .close:hover {
@@ -93,8 +98,7 @@
       height: 100%;
       width: 100%;
 
-      overflow-y: auto;
-      scrollbar-width: thin;
+      overflow-y: hidden;
     }
 
     .buttons {

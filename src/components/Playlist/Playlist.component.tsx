@@ -62,41 +62,45 @@ const ConnectedPlaylist: React.FC<IProps> = ({ href, token }: IProps) => {
             : {}
         }
       />
-      <Modal open={open} onBackdropClick={() => setOpen(false)}>
-        <Card containerClass={classes.card}>
-          <img
-            src={close}
-            alt=""
-            className={classes.close}
-            onClick={() => setOpen(false)}
-          />
-          {data ? (
-            <div className={classes.wrapper}>
-              <header className={classes.header}>
-                <h1 className={classes.title}>{data.name}</h1>
-                <div className={classes.createdBy}>
-                  Created by{" "}
-                  <span className={classes.author}>
-                    {data.owner.display_name}
-                  </span>
-                </div>
-                <div className={classes.description}>
-                  {htmlDecode(data.description ? data.description : "")}
-                </div>
-              </header>
-              <div className={classes.lineBreak} />
-              <section className={classes.section}>
-                <Tracks tracks={data.tracks} />
-              </section>
-              <section className={classes.buttons}>
-                <button className={classes.button}>Abc</button>
-              </section>
-            </div>
-          ) : (
-            "Loading..."
-          )}
-        </Card>
-      </Modal>
+      {open ? (
+        <Modal open={open} onBackdropClick={() => setOpen(false)}>
+          <Card containerClass={classes.card}>
+            <img
+              src={close}
+              alt=""
+              className={classes.close}
+              onClick={() => setOpen(false)}
+            />
+            {data ? (
+              <div className={classes.wrapper}>
+                <header className={classes.header}>
+                  <h1 className={classes.title}>{data.name}</h1>
+                  <div className={classes.createdBy}>
+                    Created by{" "}
+                    <span className={classes.author}>
+                      {data.owner.display_name}
+                    </span>
+                  </div>
+                  <div className={classes.description}>
+                    {htmlDecode(data.description ? data.description : "")}
+                  </div>
+                </header>
+                <div className={classes.lineBreak} />
+                <section className={classes.section}>
+                  <Tracks tracks={data.tracks} />
+                </section>
+                <section className={classes.buttons}>
+                  <button className={classes.button}>Abc</button>
+                </section>
+              </div>
+            ) : (
+              "Loading..."
+            )}
+          </Card>
+        </Modal>
+      ) : (
+        ""
+      )}
     </React.Fragment>
   );
 };
