@@ -32,8 +32,7 @@ steps:
   inputs:
     connectedServiceNameARM: 'Pay-As-You-Go(d0d640a9-bb06-4854-838d-4b4f31c0d40d)'
     scriptLocation: 'inlineScript'
-    inlineScript: 'az storage blob upload-batch'
-    args: '-d="$web" -s="./build"'
+    inlineScript: 'az storage blob upload-batch -d "$web" -s ./build'
   condition: "and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))"
 
 # - script: |
