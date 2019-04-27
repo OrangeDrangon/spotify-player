@@ -30,10 +30,10 @@ steps:
 
 - task: AzureCLI@1
   inputs:
-    connectedServiceNameARM: 'Pay-As-You-Go (d0d640a9-bb06-4854-838d-4b4f31c0d40d)'
+    connectedServiceNameARM: 'Pay-As-You-Go(d0d640a9-bb06-4854-838d-4b4f31c0d40d)'
     scriptLocation: 'inlineScript'
     inlineScript: 'az storage blob upload-batch'
-    args: '--destination ''$web'' --source ./build'
+    args: '--destination $web --source ./build'
 
 # - script: |
 #     git config --global user.email $(EMAIL)
