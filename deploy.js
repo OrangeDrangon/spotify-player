@@ -11,13 +11,14 @@ if (username) {
       silent: false
     }, (err) => {
       if (err) {
-        throw err;
+        console.log(err);
+        process.exit(1);
       }
       console.log("Success!");
     });
   } else {
-    throw new Error("Token not provided");
+    console.log("Token not provided");
   }
 } else {
-  throw new Error("Username not provided");
+  console.log("Username not provided");
 }
