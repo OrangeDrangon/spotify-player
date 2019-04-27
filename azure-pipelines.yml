@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'windows-2019'
+  vmImage: 'Ubuntu-16.04'
 
 steps:
 - task: NodeTool@0
@@ -24,15 +24,18 @@ steps:
   displayName: 'Build App'
 
 - script: |
-    cmd /C "set CI=true && npm run test"
+    CI=true npm run test
   displayName: 'Run tests'
   condition: "succeeded()"
 
-- task: AzureFileCopy@3
-  inputs:
-    SourcePath: './build'
-    ConnectedServiceNameARM: 'Pay-As-You-Go(d0d640a9-bb06-4854-838d-4b4f31c0d40d)'
-    Destination: 'AzureBlob'
-    StorageAccountRM: 'playerstoragekmr'
-    ContainerName: '$web'
+- script: |
+    git config --global user.email $(EMAIL)
+    git config --global user.name  $(NAME)
+  displayName: "Config git credentials"
+  condition: "and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))"
+
+
+- script: |
+    node deploy.js $(USERNAME) $(ACCESS_TOKEN)
+  displayName: 'Deploy App to GitHub Pages'
   condition: "and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))"
