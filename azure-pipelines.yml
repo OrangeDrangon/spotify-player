@@ -24,7 +24,7 @@ steps:
   displayName: 'Build App'
 
 - script: |
-    CI=true npm run test
+    cmd /C "set CI=true && npm run test"
   displayName: 'Run tests'
   condition: "succeeded()"
 
