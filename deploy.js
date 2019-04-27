@@ -8,17 +8,16 @@ if (username) {
     ghPages.publish("build", {
       message: "Deploying app...",
       repo:  `https://${username}:${token}@github.com/OrangeDrangon/spotify-player.git`,
-      silent: true
+      silent: false
     }, (err) => {
       if (err) {
-        console.log(err);
-        return;
+        throw err;
       }
       console.log("Success!");
     });
   } else {
-    console.log("Token not provided");
+    throw new Error("Token not provided");
   }
 } else {
-  console.log("Username not provided");
+  throw new Error("Username not provided");
 }
