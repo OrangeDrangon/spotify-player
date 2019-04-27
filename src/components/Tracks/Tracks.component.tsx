@@ -12,8 +12,6 @@ interface IProps {
 }
 
 const Tracks: React.FC<IProps> = ({ tracks }: IProps) => {
-  console.log(tracks);
-
   return (
     <div className={classes.table}>
       <div className={classes.header}>
@@ -21,9 +19,13 @@ const Tracks: React.FC<IProps> = ({ tracks }: IProps) => {
         <div className={classes.title}>Artist</div>
       </div>
       <div className={classes.content}>
-        {tracks.items.map(track => (
-          <Track key={track.track.id + Math.random()} track={track.track} />
-        ))}
+        {tracks.items.map(track =>
+          track.track ? (
+            <Track key={track.track.id + Math.random()} track={track.track} />
+          ) : (
+            <div key={Math.random()}>Loading...</div>
+          )
+        )}
       </div>
     </div>
   );
