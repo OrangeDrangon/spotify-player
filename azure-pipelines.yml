@@ -30,7 +30,7 @@ steps:
 
 - script: |
     git config --global user.email $(EMAIL)
-    git config --global user.name  $(NAME)
+    git config --global user.name $(NAME)
   displayName: "Config git credentials"
   condition: "and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))"
 
