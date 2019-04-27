@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { HashRouter as Router, Route, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import qs from "query-string";
 import { connect } from "react-redux";
 
@@ -48,8 +48,8 @@ const ConnectedApp: React.FC<IProps> = ({ token }: IProps) => {
       <Header />
       <div className={classes.page}>
         <Route exact path="/" render={() => <Redirect to="/featured" />} />
-        <Route path="/featured" component={Featured} />
         <Route path="/personal" component={Personal} />
+        <Route path="/featured" component={Featured} />
         <Route path="/callback" component={Callback} />
       </div>
     </Router>
