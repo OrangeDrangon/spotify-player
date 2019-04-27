@@ -33,22 +33,11 @@ steps:
     connectedServiceNameARM: 'Pay-As-You-Go(d0d640a9-bb06-4854-838d-4b4f31c0d40d)'
     scriptLocation: 'inlineScript'
     inlineScript: 'az storage blob upload-batch'
-    args: '--destination $web --source ./build'
+    args: '-d="$web" -s="./build"'
+  condition: "and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))"
 
 # - script: |
 #     git config --global user.email $(EMAIL)
 #     git config --global user.name  $(NAME)
 #   displayName: "Config git credentials"
-#   condition: "and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))"
-
-# - task: ArchiveFiles@2
-#   inputs:
-#     rootFolderOrFile: '$(Build.BinariesDirectory)'
-#   displayName: "Create Zip"
-#   condition: "and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))"
-
-# - task: PublishBuildArtifacts@1
-#   inputs:
-#     ArtifactName: '$(Build.BuildId).zip'
-#   displayName: "Upload Build Artifacts"
 #   condition: "and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))"
