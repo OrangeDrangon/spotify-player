@@ -89,9 +89,6 @@ const ConnectedPlaylist: React.FC<IProps> = ({ href, token }: IProps) => {
                 <section className={classes.section}>
                   <Tracks tracks={data.tracks} />
                 </section>
-                <section className={classes.buttons}>
-                  <button className={classes.button}>Abc</button>
-                </section>
               </div>
             ) : (
               "Loading..."

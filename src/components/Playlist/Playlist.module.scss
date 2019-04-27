@@ -100,21 +100,5 @@
 
       overflow-y: hidden;
     }
-
-    .buttons {
-      display: flex;
-      flex-flow: row;
-      justify-content: flex-end;
-      align-items: center;
-
-      width: 100%;
-      height: fit-content;
-
-      margin-top: 15px;
-
-      .button {
-        margin: 0px 100px 0px 0px;
-      }
-    }
   }
 }

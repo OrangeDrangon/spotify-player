@@ -8,13 +8,13 @@ const Header: React.FC = () => {
     <header className={classes.header}>
       <Link
         to="/featured"
-        className={classes.button}
+        className="styled-button"
       >
         Featured
       </Link>
       <Link
         to="/personal"
-        className={classes.button}
+        className="styled-button"
       >
         Personal
       </Link>
