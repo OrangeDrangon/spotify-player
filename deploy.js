@@ -8,7 +8,7 @@ if (username) {
     ghPages.publish("build", {
       message: "Deploying app...",
       repo:  `https://${username}:${token}@github.com/OrangeDrangon/spotify-player.git`,
-      silent: false
+      silent: true
     }, (err) => {
       if (err) {
         console.log(err);
