@@ -21,6 +21,44 @@ interface IProps {
 }
 
 const ConnectedApp: React.FC<IProps> = ({ token }: IProps) => {
+  if (window.Spotify && token) {
+    const player = new window.Spotify.Player({
+      name: Math.random().toString(),
+      volume: 1,
+      getOAuthToken: callback => callback(token)
+    });
+
+    player.connect().then(success => {
+      console.log(success, "success");
+    });
+    const play = ({
+      spotify_uri,
+      playerInstance: {
+        _options: { getOAuthToken, id }
+      }
+    }: {
+      spotify_uri: string;
+      playerInstance: ISpotifyPlayer;
+    }) => {
+      getOAuthToken(access_token => {
+        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${id}`, {
+          method: "PUT",
+          body: JSON.stringify({ uris: [spotify_uri] }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access_token}`
+          }
+        });
+      });
+    };
+
+    player.addListener("ready", () => {
+      play({
+        playerInstance: player,
+        spotify_uri: "spotify:track:7xGfFoTpQ2E7fRF5lN10tr"
+      });
+    });
+  }
   useEffect(() => {
     if (!token) {
       const params = qs.parse(window.location.hash);
@@ -34,7 +72,8 @@ const ConnectedApp: React.FC<IProps> = ({ token }: IProps) => {
             "user-read-birthdate",
             "user-read-email",
             "user-read-private",
-            "playlist-read-private"
+            "playlist-read-private",
+            "user-modify-playback-state"
           ],
           state: window.location.pathname
         };

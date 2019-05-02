@@ -26,41 +26,28 @@ const ConnectedTracks: React.FC<IProps> = ({
     [tracks.href]: tracks
   });
 
-  const getNext = useCallback(async () => {
-    if (tracks.next) {
-      if (cache[tracks.next]) {
-        setTracks(cache[tracks.next]);
-        return;
+  const handlePaging = useCallback(
+    async (key: "next" | "previous") => {
+      const link = tracks[key];
+      if (link) {
+        const cached = cache[link];
+        if (cached) {
+          setTracks(cached);
+          return;
+        }
+        let response = await getUrl<ISpotifyPaging<ISpotifyPlaylistTrack[]>>(
+          link,
+          token
+        );
+        if (!(response as ISpotifyError).status) {
+          response = response as ISpotifyPaging<ISpotifyPlaylistTrack[]>;
+          setCache({ ...cache, [response.href]: response });
+          setTracks(response);
+        }
       }
-      let response = await getUrl<ISpotifyPaging<ISpotifyPlaylistTrack[]>>(
-        tracks.next,
-        token
-      );
-      if (!(response as ISpotifyError).status) {
-        response = response as ISpotifyPaging<ISpotifyPlaylistTrack[]>;
-        setCache({ ...cache, [response.href]: response });
-        setTracks(response);
-      }
-    }
-  }, [tracks, token, cache]);
-
-  const getPrevious = useCallback(async () => {
-    if (tracks.previous) {
-      if (cache[tracks.previous]) {
-        setTracks(cache[tracks.previous]);
-        return;
-      }
-      let response = await getUrl<ISpotifyPaging<ISpotifyPlaylistTrack[]>>(
-        tracks.previous,
-        token
-      );
-      if (!(response as ISpotifyError).status) {
-        response = response as ISpotifyPaging<ISpotifyPlaylistTrack[]>;
-        setCache({ ...cache, [response.href]: response });
-        setTracks(response);
-      }
-    }
-  }, [tracks, token, cache]);
+    },
+    [tracks, token, cache]
+  );
 
   return (
     <div className={classes.table}>
@@ -80,7 +67,10 @@ const ConnectedTracks: React.FC<IProps> = ({
       {tracks.next || tracks.previous ? (
         <div className={classes.buttons}>
           {tracks.previous ? (
-            <button className="styled-button" onClick={getPrevious}>
+            <button
+              className="styled-button"
+              onClick={() => handlePaging("previous")}
+            >
               Previous
             </button>
           ) : (
@@ -89,7 +79,10 @@ const ConnectedTracks: React.FC<IProps> = ({
             </button>
           )}
           {tracks.next ? (
-            <button className="styled-button" onClick={getNext}>
+            <button
+              className="styled-button"
+              onClick={() => handlePaging("next")}
+            >
               Next
             </button>
           ) : (
