@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 
 import "./index.scss";
+import "rc-slider/assets/index.css";
 
 import App from "components/App/App.component";
 

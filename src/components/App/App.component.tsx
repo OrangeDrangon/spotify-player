@@ -9,13 +9,13 @@ import Header from "components/Header/Header.component";
 import Personal from "components/Personal/Personal.component";
 import Featured from "components/Featured/Featured.component";
 import Callback from "components/Callback/Callback.component";
+import Player from "components/Player/Player.component";
 
 import { ISpotifyTokenRequest } from "interfaces/ISpotifyTokenRequest.interface";
 
 import { generateSpotifyAuthUrl } from "utils/generateSpotifyAuthUrl.util";
 
 import { IState } from "redux/reducers/root.reducer";
-import Player from "components/Player/Player.component";
 
 interface IProps {
   token: string | null;
