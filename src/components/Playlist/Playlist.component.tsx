@@ -87,7 +87,7 @@ const ConnectedPlaylist: React.FC<IProps> = ({ href, token }: IProps) => {
                 </header>
                 <div className={classes.lineBreak} />
                 <section className={classes.section}>
-                  <Tracks tracks={data.tracks} />
+                  <Tracks tracks={data.tracks} playlistUri={data.uri} />
                 </section>
               </div>
             ) : (

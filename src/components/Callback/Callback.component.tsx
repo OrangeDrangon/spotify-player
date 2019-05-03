@@ -9,7 +9,6 @@ import { setToken } from "redux/actions/setToken.action";
 import { Redirect } from "react-router";
 
 interface IProps {
-  token: string | null;
   setToken: (
     token: string | null
   ) => {

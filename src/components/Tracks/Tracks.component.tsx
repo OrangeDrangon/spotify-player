@@ -15,11 +15,13 @@ import { ISpotifyError } from "interfaces/ISpotifyError.interface";
 interface IProps {
   tracks: ISpotifyPaging<ISpotifyPlaylistTrack[]>;
   token: string | null;
+  playlistUri: string;
 }
 
 const ConnectedTracks: React.FC<IProps> = ({
   token,
-  tracks: initalTracks
+  tracks: initalTracks,
+  playlistUri
 }: IProps) => {
   const [tracks, setTracks] = useState(initalTracks);
   const [cache, setCache] = useState({
@@ -58,7 +60,7 @@ const ConnectedTracks: React.FC<IProps> = ({
       <div className={classes.content}>
         {tracks.items.map(track =>
           track.track ? (
-            <Track key={track.track.id + Math.random()} track={track.track} />
+            <Track key={track.track.id + Math.random()} track={track.track} playlistUri={playlistUri} />
           ) : (
             <div key={Math.random()}>Loading...</div>
           )

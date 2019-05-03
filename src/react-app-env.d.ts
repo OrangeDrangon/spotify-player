@@ -86,7 +86,7 @@ interface ISpotifyPlayer {
     data: ISpotifyWebPlaybackError
   ): void;
 
-  removeListener(name, callback: () => void | Promise<void>);
+  removeListener(name, callback?: () => void | Promise<void>);
 
   getCurrentState(): Promise<ISpotifyWebPlaybackState>;
 

@@ -15,50 +15,13 @@ import { ISpotifyTokenRequest } from "interfaces/ISpotifyTokenRequest.interface"
 import { generateSpotifyAuthUrl } from "utils/generateSpotifyAuthUrl.util";
 
 import { IState } from "redux/reducers/root.reducer";
+import Player from "components/Player/Player.component";
 
 interface IProps {
   token: string | null;
 }
 
-const ConnectedApp: React.FC<IProps> = ({ token }: IProps) => {
-  if (window.Spotify && token) {
-    const player = new window.Spotify.Player({
-      name: Math.random().toString(),
-      volume: 1,
-      getOAuthToken: callback => callback(token)
-    });
-
-    player.connect().then(success => {
-      console.log(success, "success");
-    });
-    const play = ({
-      spotify_uri,
-      playerInstance: {
-        _options: { getOAuthToken, id }
-      }
-    }: {
-      spotify_uri: string;
-      playerInstance: ISpotifyPlayer;
-    }) => {
-      getOAuthToken(access_token => {
-        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${id}`, {
-          method: "PUT",
-          body: JSON.stringify({ uris: [spotify_uri] }),
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${access_token}`
-          }
-        });
-      });
-    };
-
-    player.addListener("ready", () => {
-      play({
-        playerInstance: player,
-        spotify_uri: "spotify:track:7xGfFoTpQ2E7fRF5lN10tr"
-      });
-    });
-  }
+const ConnectedApp: React.FC<IProps> = ({token }: IProps) => {
   useEffect(() => {
     if (!token) {
       const params = qs.parse(window.location.hash);
@@ -91,14 +54,17 @@ const ConnectedApp: React.FC<IProps> = ({ token }: IProps) => {
         <Route path="/featured" component={Featured} />
         <Route path="/callback" component={Callback} />
       </div>
+      <Player />
     </Router>
   );
 };
 
-const mapStateToProps = ({ token }: IState) => {
-  return { token };
+const mapStateToProps = ({ token, device_id }: IState) => {
+  return { token, device_id };
 };
 
-const App = connect(mapStateToProps)(ConnectedApp);
+const App = connect(
+  mapStateToProps
+)(ConnectedApp);
 
 export default App;
