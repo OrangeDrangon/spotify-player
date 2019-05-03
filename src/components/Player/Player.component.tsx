@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 import Slider, { createSliderWithTooltip } from "rc-slider";
@@ -14,6 +14,8 @@ import pause from "assets/icons/pause.svg";
 import repeatInactive from "assets/icons/repeat_inactive.svg";
 import repeatOne from "assets/icons/repeat_one.svg";
 import repeatActive from "assets/icons/repeat_active.svg";
+
+import { getNextRepeatState } from "utils/getNextRepeatState.util";
 
 import { IState } from "redux/reducers/root.reducer";
 import { setDeviceId } from "redux/actions/setDeviceId.action";
@@ -40,6 +42,8 @@ const ConnectedPlayer: React.FC<IProps> = ({
   const [player, setPlayer] = useState<ISpotifyPlayer | null>(null);
   const [currentTrack, setCurrentTrack] = useState<any | null>(null);
   const [shuffled, setShuffled] = useState(false);
+  const [repeatMode, setRepeatMode] = useState<0 | 1 | 2>(0);
+  const [progress, setProgress] = useState(0);
 
   const toggleShuffle = useCallback(async () => {
     await fetch(
@@ -51,19 +55,21 @@ const ConnectedPlayer: React.FC<IProps> = ({
         }
       }
     );
+    setShuffled(!shuffled);
   }, [token, shuffled]);
 
   const cycleRepeat = useCallback(async () => {
-    await fetch(
-      `https://api.spotify.com/v1/me/player/shuffle?state=${!shuffled}`,
-      {
-        method: "PUT",
-        headers: {
-          authorization: `Bearer ${token}`
-        }
+    const [str, num] = getNextRepeatState(repeatMode);
+    await fetch(`https://api.spotify.com/v1/me/player/repeat?state=${str}`, {
+      method: "PUT",
+      headers: {
+        authorization: `Bearer ${token}`
       }
-    );
-  }, [token, shuffled]);
+    });
+    setRepeatMode(num);
+  }, [token, repeatMode]);
+
+  const slider = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (window.Spotify && token && !device_id && !player) {
@@ -78,12 +84,15 @@ const ConnectedPlayer: React.FC<IProps> = ({
       });
 
       playerNew.addListener("player_state_changed", data => {
-        setPaused(data.paused);
-        setShuffled(data.shuffle);
-        if (data.track_window && data.track_window.current_track) {
-          setCurrentTrack(data.track_window.current_track);
+        if (data) {
+          setPaused(data.paused);
+          setShuffled(data.shuffle);
+          setRepeatMode(data.repeat_mode);
+          if (data.track_window && data.track_window.current_track) {
+            setCurrentTrack(data.track_window.current_track);
+          }
+          setProgress(data.position);
         }
-        console.log(data);
       });
 
       playerNew.connect();
@@ -91,6 +100,24 @@ const ConnectedPlayer: React.FC<IProps> = ({
       setPlayer(playerNew);
     }
   }, [device_id, token, setDeviceId, player]);
+
+  useEffect(() => {
+    if (slider.current) {
+      slider.current.value = (progress / 1000).toString();
+    }
+  }, [progress]);
+
+  useEffect(() => {
+    if (!paused && currentTrack) {
+      const interval = setInterval(
+        () => setProgress(progress => progress + 50),
+        50
+      );
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [paused, currentTrack]);
 
   return (
     <div className={classes.container}>
@@ -137,11 +164,48 @@ const ConnectedPlayer: React.FC<IProps> = ({
               >
                 <img src={next} alt="" />
               </button>{" "}
-              <button className={`styled-button ${classes.iconButton}`}>
-                <img src={repeatOne} alt="" />
+              <button
+                className={`styled-button ${classes.iconButton}`}
+                onClick={() => cycleRepeat()}
+              >
+                <img
+                  src={
+                    repeatMode === 0
+                      ? repeatInactive
+                      : repeatMode === 1
+                      ? repeatActive
+                      : repeatOne
+                  }
+                  alt=""
+                />
               </button>
             </div>
-            <SilderWithTooltip />
+            {currentTrack ? (
+              <div className={classes.slider}>
+                <input
+                  type="range"
+                  min={0}
+                  max={Math.floor(currentTrack.duration_ms / 1000)}
+                  step={.05}
+                  ref={slider}
+                  onChange={({ currentTarget }) => {
+                    player.seek(Number(currentTarget.value) * 1000);
+                  }}
+                />
+                <div className={classes.time}>
+                  {new Date(progress).getMinutes()}:
+                  {new Date(progress).getSeconds() < 10
+                    ? `0${new Date(progress).getSeconds()}`
+                    : new Date(progress).getSeconds()}
+                  /{new Date(currentTrack.duration_ms).getMinutes()}:
+                  {new Date(currentTrack.duration_ms).getSeconds() < 10
+                    ? `0${new Date(currentTrack.duration_ms).getSeconds()}`
+                    : new Date(currentTrack.duration_ms).getSeconds()}
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
           <SilderWithTooltip
             defaultValue={100}

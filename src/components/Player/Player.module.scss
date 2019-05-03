@@ -56,6 +56,23 @@
 
         width: 100%;
       }
+
+      .slider {
+        display: flex;
+        flex-flow: row;
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+
+        input {
+          width: 100%;
+        }
+
+        .time {
+          color: white;
+        }
+      }
     }
 
     .iconButton {
