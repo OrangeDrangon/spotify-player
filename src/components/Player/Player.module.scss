@@ -1,6 +1,5 @@
 .container {
   display: flex;
-  flex-flow: row;
   justify-content: center;
   align-items: center;
 
@@ -10,51 +9,73 @@
   background-color: #494949;
 
   width: 100%;
-  height: 70px;
+  height: 100px;
 
-  .information {
+  .controls {
     display: flex;
     flex-flow: row;
-
-    .words {
-      display: flex;
-      flex-flow: column;
-      justify-content: center;
-      align-items: flex-start;
-
-      margin-left: 15px;
-
-      color: white;
-    }
-  }
-
-  .nowPlaying {
-    display: flex;
-    flex-flow: column;
-
-    .buttons {
-      display: flex;
-      flex-flow: row;
-    }
-  }
-
-  .iconButton {
-    display: flex;
     justify-content: center;
     align-items: center;
 
-    border-radius: 50%;
+    width: 85%;
 
-    width: 50px;
-    height: 50px;
+    .information {
+      display: flex;
+      flex-flow: row;
 
-    margin-bottom: 0;
+      img {
+        width: 64px;
+        height: 64px;
+      }
 
-    img {
-      height: 25px;
-      width: 25px;
+      .words {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: flex-start;
 
-      fill: white;
+        margin-left: 15px;
+
+        color: white;
+      }
+    }
+
+    .nowPlaying {
+      display: flex;
+      flex-flow: column;
+
+      width: 100%;
+
+      .buttons {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-evenly;
+        align-items: center;
+
+        margin-bottom: 5px;
+
+        width: 100%;
+      }
+    }
+
+    .iconButton {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      border-radius: 50%;
+
+      width: 50px;
+      height: 50px;
+
+      margin: 0;
+
+      img {
+        height: 25px;
+        width: 25px;
+
+        fill: white;
+      }
     }
   }
 }
