@@ -110,8 +110,8 @@ const ConnectedPlayer: React.FC<IProps> = ({
   useEffect(() => {
     if (!paused && currentTrack) {
       const interval = setInterval(
-        () => setProgress(progress => progress + 50),
-        50
+        () => setProgress(progress => progress + 1000),
+        1000
       );
       return () => {
         clearInterval(interval);
@@ -186,11 +186,11 @@ const ConnectedPlayer: React.FC<IProps> = ({
                   type="range"
                   min={0}
                   max={Math.floor(currentTrack.duration_ms / 1000)}
-                  step={.05}
+                  step={1}
                   ref={slider}
-                  onChange={({ currentTarget }) => {
-                    player.seek(Number(currentTarget.value) * 1000);
-                  }}
+                  onChange={({ currentTarget }) =>
+                    player.seek(Number(currentTarget.value) * 1000)
+                  }
                 />
                 <div className={classes.time}>
                   {new Date(progress).getMinutes()}:
@@ -208,13 +208,13 @@ const ConnectedPlayer: React.FC<IProps> = ({
             )}
           </div>
           <SilderWithTooltip
+            className={classes.volume}
             defaultValue={100}
             min={0}
             max={100}
             step={1}
             onChange={(v: number) => player.setVolume(v / 100)}
             tipFormatter={(v: number) => `${v}%`}
-            style={{ width: 100 }}
           />
         </div>
       ) : (
