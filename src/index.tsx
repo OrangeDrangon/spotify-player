@@ -7,7 +7,7 @@ import "rc-slider/assets/index.css";
 
 import App from "components/App/App.component";
 
-import store from "redux/store";
+import { store } from "redux/store";
 
 import * as serviceWorker from "./serviceWorker";
 

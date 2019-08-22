@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
 import classes from "./Tracks.module.scss";
 
@@ -8,21 +8,19 @@ import Track from "components/Track/Track.component";
 import { ISpotifyPaging } from "interfaces/ISpotifyPaging.interface";
 import { ISpotifyPlaylistTrack } from "interfaces/ISpotifyPlaylistTrack.inerface";
 
-import { IState } from "redux/reducers/root.reducer";
 import { getUrl } from "utils/getUrl.util";
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";
 
 interface IProps {
   tracks: ISpotifyPaging<ISpotifyPlaylistTrack[]>;
-  token: string | null;
   playlistUri: string;
 }
 
-const ConnectedTracks: React.FC<IProps> = ({
-  token,
+const Tracks: React.FC<IProps> = ({
   tracks: initalTracks,
   playlistUri
 }: IProps) => {
+  const token = useSelector((state: any) => state[0].token);
   const [tracks, setTracks] = useState(initalTracks);
   const [cache, setCache] = useState({
     [tracks.href]: tracks
@@ -60,7 +58,11 @@ const ConnectedTracks: React.FC<IProps> = ({
       <div className={classes.content}>
         {tracks.items.map(track =>
           track.track ? (
-            <Track key={track.track.id + Math.random()} track={track.track} playlistUri={playlistUri} />
+            <Track
+              key={track.track.id + Math.random()}
+              track={track.track}
+              playlistUri={playlistUri}
+            />
           ) : (
             <div key={Math.random()}>Loading...</div>
           )
@@ -99,11 +101,5 @@ const ConnectedTracks: React.FC<IProps> = ({
     </div>
   );
 };
-
-const mapStateToProps = ({ token }: IState) => {
-  return { token };
-};
-
-const Tracks = connect(mapStateToProps)(ConnectedTracks);
 
 export default Tracks;

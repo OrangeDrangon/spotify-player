@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import qs from "query-string";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
 import classes from "./App.module.scss";
 
@@ -15,13 +15,8 @@ import { ISpotifyTokenRequest } from "interfaces/ISpotifyTokenRequest.interface"
 
 import { generateSpotifyAuthUrl } from "utils/generateSpotifyAuthUrl.util";
 
-import { IState } from "redux/reducers/root.reducer";
-
-interface IProps {
-  token: string | null;
-}
-
-const ConnectedApp: React.FC<IProps> = ({token }: IProps) => {
+const App: React.FC = () => {
+  const token = useSelector((state: any) => state[0].token);
   useEffect(() => {
     if (!token) {
       const params = qs.parse(window.location.hash);
@@ -58,13 +53,5 @@ const ConnectedApp: React.FC<IProps> = ({token }: IProps) => {
     </Router>
   );
 };
-
-const mapStateToProps = ({ token, device_id }: IState) => {
-  return { token, device_id };
-};
-
-const App = connect(
-  mapStateToProps
-)(ConnectedApp);
 
 export default App;

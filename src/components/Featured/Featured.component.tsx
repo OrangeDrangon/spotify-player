@@ -1,20 +1,16 @@
 import React, { useCallback } from "react";
-import { connect } from "react-redux";
 
 import { getUrl } from "utils/getUrl.util";
 
 import PlaylistList from "components/PlaylistList/PlaylistList.component";
 
-import { IState } from "redux/reducers/root.reducer";
-
 import { ISpotifyFeatured } from "interfaces/ISpotifyFeatured.interface";
 import { ISpotifyError } from "interfaces/ISpotifyError.interface";
+import { useSelector } from "react-redux";
 
-interface IProps {
-  token: string | null;
-}
 
-const FeaturedConnected: React.FC<IProps> = ({ token }: IProps) => {
+const Featured: React.FC = () => {
+  const token = useSelector((state: any) => state[0].token);
   const getFeatured = useCallback(async () => {
     const response = await getUrl<ISpotifyFeatured>(
       "https://api.spotify.com/v1/browse/featured-playlists",
@@ -29,11 +25,5 @@ const FeaturedConnected: React.FC<IProps> = ({ token }: IProps) => {
 
   return <PlaylistList getSimple={getFeatured} />;
 };
-
-const mapStateToProps = ({ token }: IState) => {
-  return { token };
-};
-
-const Featured = connect(mapStateToProps)(FeaturedConnected);
 
 export default Featured;

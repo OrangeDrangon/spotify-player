@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/heading-has-content */
 import React, { useState, useEffect, useCallback } from "react";
-import { connect } from "react-redux";
 
 import classes from "./Playlist.module.scss";
 
@@ -15,15 +14,14 @@ import { ISpotifyError } from "interfaces/ISpotifyError.interface";
 
 import { htmlDecode } from "utils/htmlDecode.util";
 import { getUrl } from "utils/getUrl.util";
-
-import { IState } from "redux/reducers/root.reducer";
+import { useSelector } from "react-redux";
 
 interface IProps {
   href: string;
-  token: string | null;
 }
 
-const ConnectedPlaylist: React.FC<IProps> = ({ href, token }: IProps) => {
+const Playlist: React.FC<IProps> = ({ href }: IProps) => {
+  const token = useSelector((state: any) => state[0].token);
   const [data, setData] = useState<ISpotifyPlaylistFull | null>(null);
   const [open, setOpen] = useState(false);
 
@@ -101,11 +99,5 @@ const ConnectedPlaylist: React.FC<IProps> = ({ href, token }: IProps) => {
     </React.Fragment>
   );
 };
-
-const mapStateToProps = ({ token }: IState) => {
-  return { token };
-};
-
-const Playlist = connect(mapStateToProps)(ConnectedPlaylist);
 
 export default Playlist;
