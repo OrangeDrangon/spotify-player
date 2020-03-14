@@ -1,22 +1,27 @@
 {
   "files": {
-    "main.css": "/static/css/main.37350032.chunk.css",
-    "main.js": "/static/js/main.e3c1ea62.chunk.js",
-    "main.js.map": "/static/js/main.e3c1ea62.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.76127eef.js",
-    "runtime-main.js.map": "/static/js/runtime-main.76127eef.js.map",
-    "static/js/2.8785bd81.chunk.js": "/static/js/2.8785bd81.chunk.js",
-    "static/js/2.8785bd81.chunk.js.map": "/static/js/2.8785bd81.chunk.js.map",
+    "main.css": "/static/css/main.27cf60ce.chunk.css",
+    "main.js": "/static/js/main.a360f130.chunk.js",
+    "main.js.map": "/static/js/main.a360f130.chunk.js.map",
+    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
+    "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
+    "static/css/2.509658c0.chunk.css": "/static/css/2.509658c0.chunk.css",
+    "static/js/2.eaaac645.chunk.js": "/static/js/2.eaaac645.chunk.js",
+    "static/js/2.eaaac645.chunk.js.map": "/static/js/2.eaaac645.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.422b5da194d7bf801b4ad6737e1a3e23.js": "/precache-manifest.422b5da194d7bf801b4ad6737e1a3e23.js",
+    "precache-manifest.1bd109b3ed2a24deb7c205aeac435618.js": "/precache-manifest.1bd109b3ed2a24deb7c205aeac435618.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.37350032.chunk.css.map": "/static/css/main.37350032.chunk.css.map",
-    "static/js/2.8785bd81.chunk.js.LICENSE.txt": "/static/js/2.8785bd81.chunk.js.LICENSE.txt"
-  },
-  "entrypoints": [
-    "static/js/runtime-main.76127eef.js",
-    "static/js/2.8785bd81.chunk.js",
-    "static/css/main.37350032.chunk.css",
-    "static/js/main.e3c1ea62.chunk.js"
-  ]
+    "static/css/2.509658c0.chunk.css.map": "/static/css/2.509658c0.chunk.css.map",
+    "static/css/main.27cf60ce.chunk.css.map": "/static/css/main.27cf60ce.chunk.css.map",
+    "static/media/close.svg": "/static/media/close.c3770f64.svg",
+    "static/media/pause.svg": "/static/media/pause.ec371d86.svg",
+    "static/media/play.svg": "/static/media/play.e89c0883.svg",
+    "static/media/repeat_active.svg": "/static/media/repeat_active.63f00651.svg",
+    "static/media/repeat_inactive.svg": "/static/media/repeat_inactive.a5b97110.svg",
+    "static/media/repeat_one.svg": "/static/media/repeat_one.7583cdf3.svg",
+    "static/media/shuffle_active.svg": "/static/media/shuffle_active.8df07479.svg",
+    "static/media/shuffle_inactive.svg": "/static/media/shuffle_inactive.2cca4185.svg",
+    "static/media/skip_next.svg": "/static/media/skip_next.cf9d95de.svg",
+    "static/media/skip_previous.svg": "/static/media/skip_previous.9bb6aca1.svg"
+  }
 }
