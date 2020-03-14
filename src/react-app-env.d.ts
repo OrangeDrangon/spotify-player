@@ -59,7 +59,7 @@ interface ISpotifyPlayerOptions extends ISpotifyPlayerParams {
 }
 
 interface ISpotifyPlayer {
-  new (data: ISpotifyPlayerParams): ISpotifyPlayer;
+  new(data: ISpotifyPlayerParams): ISpotifyPlayer;
 
   _options: ISpotifyPlayerOptions;
 
@@ -110,7 +110,7 @@ interface ISpotifyPlayer {
 }
 
 interface ISpotify {
-  Player: ISpotifyPlayer;
+  Player: ISpotifyPlayer
 }
 
 interface Window {

@@ -1,14 +1,17 @@
 import React, { useCallback } from "react";
-import { useSelector } from "react-redux";
+import { connect } from "react-redux";
 
 import classes from "./Track.module.scss";
 
 import { ISpotifyTrack } from "interfaces/ISpotiftyTrack.interface";
 
+import { IState } from "redux/reducers/root.reducer";
 
 interface IProps {
   track: ISpotifyTrack;
+  token: string | null;
   playlistUri: string;
+  device_id: string | null;
 }
 
 interface ISpotifyPlayBody {
@@ -18,20 +21,20 @@ interface ISpotifyPlayBody {
   position_ms?: string;
 }
 
-const Track: React.FC<IProps> = ({
+const ConnectedTrack: React.FC<IProps> = ({
   track,
+  token,
   playlistUri,
+  device_id
 }: IProps) => {
-  const token = useSelector((state: any) => state[0].token);
-  const deviceId = useSelector((state: any) => state[0].deviceId);
   const play = useCallback(async () => {
-    if (deviceId && token) {
+    if (device_id && token) {
       const body: ISpotifyPlayBody = {
         context_uri: playlistUri,
         offset: { uri: track.uri }
       };
       await fetch(
-        `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`,
+        `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
         {
           method: "PUT",
           body: JSON.stringify(body),
@@ -42,7 +45,7 @@ const Track: React.FC<IProps> = ({
         }
       );
     }
-  }, [token, track, playlistUri, deviceId]);
+  }, [token, track, playlistUri, device_id]);
   return (
     <div className={classes.row}>
       <div className={classes.elm}>
@@ -54,5 +57,11 @@ const Track: React.FC<IProps> = ({
     </div>
   );
 };
+
+const mapStateToProps = ({ token, device_id }: IState) => {
+  return { token, device_id };
+};
+
+const Track = connect(mapStateToProps)(ConnectedTrack);
 
 export default Track;

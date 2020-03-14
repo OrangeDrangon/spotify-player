@@ -1,18 +1,23 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import qs from "query-string";
 
 import { ISpotifyTokenResponse } from "interfaces/ISpotifyTokenResponse.interface";
 
-import { setToken } from "redux/features/authFeature";
+import { setToken } from "redux/actions/setToken.action";
 import { Redirect } from "react-router";
 
-const Callback: React.FC = () => {
-  const dispatch = useDispatch();
-  const dispatchToken = useCallback(
-    (token: string | null) => dispatch(setToken({token})),
-    [dispatch],
-  )
+interface IProps {
+  setToken: (
+    token: string | null
+  ) => {
+    type: string;
+    payload: string | null;
+  };
+}
+
+const CallbackConnected: React.FC<IProps> = ({ setToken }: IProps) => {
   const [redirectTo, setRedirectTo] = useState<string | null>(null);
   useEffect(() => {
     let cancelled = false;
@@ -24,9 +29,9 @@ const Callback: React.FC = () => {
 
       // If the effect has not been cancelled we set the state
       if (!cancelled) {
-        dispatchToken(spotifyResponse.access_token);
+        setToken(spotifyResponse.access_token);
         timeoutId = setTimeout(
-          () => dispatchToken(null),
+          () => setToken(null),
           Number(spotifyResponse.expires_in) * 1000
         );
       }
@@ -41,12 +46,21 @@ const Callback: React.FC = () => {
         clearTimeout(timeoutId);
       }
     };
-  }, [dispatchToken]);
+  }, [setToken]);
   if (redirectTo) {
     return <Redirect to={redirectTo} />;
   } else {
     return <div>Redirecting...</div>;
   }
 };
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return { setToken: (token: string | null) => dispatch(setToken(token)) };
+};
+
+const Callback = connect(
+  null,
+  mapDispatchToProps
+)(CallbackConnected);
 
 export default Callback;

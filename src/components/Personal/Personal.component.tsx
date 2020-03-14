@@ -1,19 +1,20 @@
 import React, { useCallback } from "react";
+import { connect } from "react-redux";
 
 import { getUrl } from "utils/getUrl.util";
 
 import PlaylistList from "components/PlaylistList/PlaylistList.component";
 
+import { IState } from "redux/reducers/root.reducer";
+
 import { ISpotifyPaging } from "interfaces/ISpotifyPaging.interface";
 import { ISpotifyPlaylistSimple } from "interfaces/ISpotifyPlaylist.interface";
-import { useSelector } from "react-redux";
 
 interface IProps {
   token: string | null;
 }
 
-const Personal: React.FC<IProps> = () => {
-  const token = useSelector((state: any) => state[0].token);
+const PersonalConnected: React.FC<IProps> = ({ token }: IProps) => {
   const getPlaylistList = useCallback(async () => {
     return await getUrl<ISpotifyPaging<ISpotifyPlaylistSimple[]>>(
       "https://api.spotify.com/v1/me/playlists",
@@ -22,5 +23,11 @@ const Personal: React.FC<IProps> = () => {
   }, [token]);
   return <PlaylistList getSimple={getPlaylistList} />;
 };
+
+const mapStateToProps = ({ token }: IState) => {
+  return { token };
+};
+
+const Personal = connect(mapStateToProps)(PersonalConnected);
 
 export default Personal;

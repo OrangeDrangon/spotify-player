@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
 import Slider, { createSliderWithTooltip } from "rc-slider";
 
 import classes from "./Player.module.scss";
@@ -15,18 +16,28 @@ import repeatOne from "assets/icons/repeat_one.svg";
 import repeatActive from "assets/icons/repeat_active.svg";
 
 import { getNextRepeatState } from "utils/getNextRepeatState.util";
-import { setDeviceId } from "redux/features/authFeature";
+
+import { IState } from "redux/reducers/root.reducer";
+import { setDeviceId } from "redux/actions/setDeviceId.action";
+
+interface IProps {
+  token: string | null;
+  device_id: string | null;
+  setDeviceId: (
+    device_id: string | null
+  ) => {
+    type: string;
+    payload: string | null;
+  };
+}
 
 const SilderWithTooltip = createSliderWithTooltip(Slider);
 
-const Player: React.FC = () => {
-  const token = useSelector((state: any) => state[0].token);
-  const deviceId = useSelector((state: any) => state[0].deviceId);
-  const dispatch = useDispatch();
-  const dispatchDeviceId = useCallback(
-    (deviceId: string) => dispatch(setDeviceId({ deviceId })),
-    [dispatch]
-  );
+const ConnectedPlayer: React.FC<IProps> = ({
+  token,
+  device_id,
+  setDeviceId
+}: IProps) => {
   const [paused, setPaused] = useState(true);
   const [player, setPlayer] = useState<ISpotifyPlayer | null>(null);
   const [currentTrack, setCurrentTrack] = useState<any | null>(null);
@@ -61,15 +72,15 @@ const Player: React.FC = () => {
   const slider = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    if (window.Spotify && token && !deviceId && !player) {
+    if (window.Spotify && token && !device_id && !player) {
       const playerNew = new window.Spotify.Player({
-        name: "Kyle's Spotify Player",
+        name: "Drangon's Web Player",
         volume: 1,
         getOAuthToken: callback => callback(token)
       });
 
       playerNew.addListener("ready", ({ device_id }) => {
-        dispatchDeviceId(device_id);
+        setDeviceId(device_id);
       });
 
       playerNew.addListener("player_state_changed", data => {
@@ -88,7 +99,7 @@ const Player: React.FC = () => {
 
       setPlayer(playerNew);
     }
-  }, [deviceId, token, dispatchDeviceId, player]);
+  }, [device_id, token, setDeviceId, player]);
 
   useEffect(() => {
     if (slider.current) {
@@ -110,7 +121,7 @@ const Player: React.FC = () => {
 
   return (
     <div className={classes.container}>
-      {player && deviceId ? (
+      {player && device_id ? (
         <div className={classes.controls}>
           {currentTrack ? (
             <div className={classes.information}>
@@ -212,5 +223,19 @@ const Player: React.FC = () => {
     </div>
   );
 };
+
+const mapStateToProps = ({ token, device_id }: IState) => {
+  return { token, device_id };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    setDeviceId: (device_id: string | null) => dispatch(setDeviceId(device_id))
+  };
+};
+const Player = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ConnectedPlayer);
 
 export default Player;

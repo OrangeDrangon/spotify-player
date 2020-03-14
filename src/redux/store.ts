@@ -1,6 +1,7 @@
-import { configureStore, combineReducers } from "redux-starter-kit";
-import { authReducer } from "./features/authFeature";
+import { createStore } from "redux";
 
-const reducer = combineReducers([authReducer]);
+import { rootReducer } from "./reducers/root.reducer";
 
-export const store = configureStore({ reducer });
+const store = createStore(rootReducer);
+
+export default store;
